@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ class PostsController extends Controller
 {
     public function index(): View
     {
-        $posts = Post::with('category', 'user')->latest()->paginate(10);
+        $posts = Post::with('category', 'user', 'tags')->latest()->paginate(10);
 
         $publishedCount = Post::where('is_published', true)->count();
         $draftCount     = Post::where('is_published', false)->count();
@@ -41,6 +42,7 @@ class PostsController extends Controller
             'category_id'  => 'required|exists:categories,id',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
+            'tags'         => 'nullable|string',
         ]);
 
         if (empty($validated['slug'])) {
@@ -54,7 +56,11 @@ class PostsController extends Controller
             $validated['published_at'] = now();
         }
 
-        Post::create($validated);
+        $post = Post::create($validated);
+ 
+        if ($request->has('tags')) {
+            $this->syncTags($post, $request->tags);
+        }
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Post creado exitosamente.');
@@ -91,6 +97,7 @@ class PostsController extends Controller
             'category_id'  => 'required|exists:categories,id',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
+            'tags'         => 'nullable|string',
         ]);
  
         $validated['excerpt'] = $validated['excerpt'] ?? '';
@@ -104,6 +111,10 @@ class PostsController extends Controller
         }
 
         $post->update($validated);
+ 
+        if ($request->has('tags')) {
+            $this->syncTags($post, $request->tags);
+        }
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Post actualizado exitosamente.');
@@ -112,8 +123,28 @@ class PostsController extends Controller
     public function destroy(Post $post): RedirectResponse
     {
         $post->delete();
-
+ 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Post eliminado exitosamente.');
+    }
+ 
+    private function syncTags(Post $post, ?string $tagsString): void
+    {
+        if (empty($tagsString)) {
+            $post->tags()->detach();
+            return;
+        }
+ 
+        $tags = collect(explode(',', $tagsString))
+            ->map(fn($tag) => trim($tag))
+            ->filter()
+            ->map(function ($tag) {
+                return Tag::firstOrCreate(
+                    ['slug' => Str::slug($tag)],
+                    ['name' => $tag]
+                )->id;
+            });
+ 
+        $post->tags()->sync($tags);
     }
 }

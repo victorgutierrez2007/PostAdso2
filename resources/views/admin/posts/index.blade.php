@@ -221,19 +221,20 @@
                                             </div>
 
                                             {{-- Delete Modal --}}
-                                            <div x-show="showDeleteModal" @keydown.escape="showDeleteModal = false"
-                                                 class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+                                            <div x-show="showDeleteModal" x-transition.opacity @keydown.escape="showDeleteModal = false"
+                                                 class="fixed inset-0 bg-black/75 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
                                                  style="display: none;">
-                                                <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-2xl max-w-sm w-full border border-gray-200 dark:border-zinc-700 p-6" @click.stop>
-                                                    <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
-                                                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div x-show="showDeleteModal" x-transition.scale.95 @click.stop
+                                                     class="bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl max-w-sm w-full border border-gray-200 dark:border-zinc-700 p-8">
+                                                    <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 dark:bg-red-900/30 rounded-full mb-6">
+                                                        <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                         </svg>
                                                     </div>
-                                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-2">
+                                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white text-center mb-2">
                                                         ¿Eliminar post?
                                                     </h3>
-                                                    <p class="text-gray-600 dark:text-gray-400 text-center mb-6 text-sm">
+                                                    <p class="text-gray-600 dark:text-gray-400 text-center mb-8 text-sm">
                                                         Esta acción no se puede deshacer. Se eliminará permanentemente <strong class="text-gray-800 dark:text-gray-200">"{{ Str::limit($post->title, 40) }}"</strong> y todos sus datos asociados.
                                                     </p>
                                                     <div class="flex gap-3">

@@ -23,9 +23,9 @@ class PostFactory extends Factory
             'slug' => $this->faker->unique()->slug,
             'excerpt' => $this->faker->paragraph,
             'content' => $this->faker->text(2000),
-            'image_path' => $this->faker->imageUrl(640, 480, 'posts', true),
-            'user_id' =>1, // Asumiendo que el usuario con ID 1 existe
-            'category_id' =>Category::all()->random()->id, // Asumiendo que hay categorías en la base de datos
+            'image_path' => $this->faker->imageUrl(1280, 720, 'tech', true),
+            'user_id' => 1,
+            'category_id' => \App\Models\Category::all()->random()->id ?? 1,
             'is_published' => true,
             'published_at' => now(),
         ];

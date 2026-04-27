@@ -8,7 +8,84 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.bunny.net">
-<link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+<link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600|outfit:300,400,500,600,700,800" rel="stylesheet" />
+
+<style>
+    :root {
+        --brand-primary: #3b82f6;
+        --brand-secondary: #6366f1;
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.3);
+    }
+
+    .dark:root {
+        --glass-bg: rgba(24, 24, 27, 0.7);
+        --glass-border: rgba(39, 39, 42, 0.5);
+    }
+
+    body {
+        font-family: 'Outfit', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        scroll-behavior: smooth;
+    }
+
+    /* Glassmorphism effects */
+    .glass {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+    }
+
+    /* Modern scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 20px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+        background: #3f3f46;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    /* Hover scales */
+    .hover-scale {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .hover-scale:hover {
+        transform: scale(1.02);
+    }
+
+    /* Specific Quill Overrides for Beauty */
+    .ql-toolbar.ql-snow {
+        border: none !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        background: #fcfcfd !important;
+        padding: 12px !important;
+    }
+    .dark .ql-toolbar.ql-snow {
+        background: #18181b !important;
+        border-bottom: 1px solid #27272a !important;
+    }
+</style>
 
 <!-- Quill Editor -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />

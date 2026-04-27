@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\category;
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -15,14 +15,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $user = User::updateOrCreate(
+            ['email' => 'victor@gmail.com'],
+            [
+                'name' => 'victor gutierrez',
+                'password' => bcrypt('victor123'),
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'wilson garcia',
-            'email' => 'wilson@gmail.com',
-            'password' => bcrypt('wilson123'),
-        ]);
-        category::factory(5)->create();
-        Post::factory(50)->create();
+        $categories = collect(['Tecnología', 'Programación', 'Diseño Web', 'Laravel', 'IA'])->map(function ($name) {
+            return Category::updateOrCreate(
+                ['slug' => \Illuminate\Support\Str::slug($name)],
+                ['name' => $name]
+            );
+        });
+
+        $tags = collect(['Nuevo', 'Tutorial', 'Tip', 'Destacado', 'Actualidad'])->map(function ($name) {
+            return \App\Models\Tag::updateOrCreate(
+                ['slug' => \Illuminate\Support\Str::slug($name)],
+                ['name' => $name]
+            );
+        });
+
+        Post::factory(20)->create([
+            'user_id' => $user->id,
+        ])->each(function ($post) use ($tags) {
+            $post->tags()->attach($tags->random(rand(1, 3))->pluck('id'));
+        });
     }
 }

@@ -43,4 +43,12 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Relación con los Tags
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

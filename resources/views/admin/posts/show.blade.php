@@ -64,7 +64,7 @@
                         {{-- Contenido --}}
                         <div class="mb-8">
                             <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">Contenido</h2>
-                            <div class="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{{ $post->content }}</div>
+                            <div class="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{!! $post->content !!}</div>
                         </div>
 
                         {{-- Estado --}}
